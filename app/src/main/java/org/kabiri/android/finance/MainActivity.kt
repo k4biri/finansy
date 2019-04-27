@@ -20,20 +20,33 @@ class MainActivity : AppCompatActivity() {
         // access the cloud fireStore db
         val db = FirebaseFirestore.getInstance()
 
-        // create a new user
-        val user = HashMap<String, Any>()
-        user["first"] = "Ada"
-        user["last"] = "Lovelace"
-        user["born"] = 1815
+        // add a new user
+//        val user = HashMap<String, Any>()
+//        user["first"] = "Alan"
+//        user["middle"] = "Mathison"
+//        user["last"] = "Turring"
+//        user["born"] = 1912
+//
+//        // Add a new document with a generated ID
+//        db.collection("users")
+//            .add(user)
+//            .addOnSuccessListener { docReference ->
+//                Log.d(TAG, "DocumentSnapshot added with ID: ${docReference.id}")
+//            }
+//            .addOnFailureListener { e ->
+//                Log.w(TAG, "Error adding document", e)
+//            }
 
-        // add a new doc with a generated id
-        db.collection("users")
-            .add(user)
-            .addOnSuccessListener { docReference ->
-                Log.d(TAG, "Document snapshot added with id: ${docReference.id}")
+        db.collection("users").get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                }
             }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
+            .addOnFailureListener {exception ->
+                Log.w(TAG, "error getting documents.", exception)
             }
+
+
     }
 }
