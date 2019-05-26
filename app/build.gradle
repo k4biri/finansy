@@ -26,12 +26,17 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha5'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta1'
     testImplementation 'junit:junit:4.13-beta-2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-firestore-ktx:18.2.0'
+
+    // fireBase core dependency
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    // fireBase fireStore db
+    implementation 'com.google.firebase:firebase-firestore-ktx:19.0.0'
+    // fireBase login UI
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
