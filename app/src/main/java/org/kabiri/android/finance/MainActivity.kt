@@ -35,11 +35,17 @@ class MainActivity : AppCompatActivity() {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build(),
-            RC_SIGN_IN)
+            RC_SIGN_IN
+        )
 
         // prepare the spinners.
-        spCategory.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOf("cat1", "cat2", "cat3"))
-        spPaymentType.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOf("BAR", "CARD", "PP", "N26", "GOOG"))
+        spCategory.adapter =
+            ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOf("cat1", "cat2", "cat3"))
+        spPaymentType.adapter = ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_item,
+            arrayOf("BAR", "CARD", "PP", "N26", "GOOG")
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
             user?.let {
                 // create the user specific table.
-                val mRef = db.getReference(it.uid)
+                val mRef = db.getReference("users/" + it.uid)
                 mRef.setValue("Some new user data") { databaseError, databaseReference ->
                     Toast.makeText(this@MainActivity, "something happened!", Toast.LENGTH_SHORT).show()
                     progressBar.visibility = View.INVISIBLE
