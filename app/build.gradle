@@ -32,10 +32,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // fireBase core dependency
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
     // Firebase realtime database.
     implementation 'com.google.firebase:firebase-database:17.0.0'
     // fireBase login UI
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 }
 

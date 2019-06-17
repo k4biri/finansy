@@ -57,9 +57,9 @@ class MainActivity : AppCompatActivity() {
         btSubmit.setOnClickListener {
             progressBar.visibility = View.VISIBLE
 
-//            val db = FirebaseDatabase.getInstance()
-//            val mRef = db.getReference("messages")
-//            mRef.setValue("Hello world!")
+            val db = FirebaseDatabase.getInstance()
+            val mRef = db.getReference("messages")
+            mRef.setValue("Hello world!")
         }
     }
 
