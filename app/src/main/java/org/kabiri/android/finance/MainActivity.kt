@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -58,8 +60,15 @@ class MainActivity : AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
 
             val db = FirebaseDatabase.getInstance()
-            val mRef = db.getReference("messages")
-            mRef.setValue("Hello world!")
+
+            user?.let {
+                // create the user specific table.
+                val mRef = db.getReference(it.uid)
+                mRef.setValue("Some new user data") { databaseError, databaseReference ->
+                    Toast.makeText(this@MainActivity, "something happened!", Toast.LENGTH_SHORT).show()
+                    progressBar.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 
