@@ -10,19 +10,18 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import org.kabiri.android.finance.firebase.RealtimeDatabaseHelper
 import org.kabiri.android.finance.model.PaymentEntry
 import org.kabiri.android.finance.viewmodel.MainActivityViewModel
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val dbHelper = RealtimeDatabaseHelper()
     private lateinit var viewModel: MainActivityViewModel
     private var user: FirebaseUser? = null
     private var dateString = ""
@@ -32,15 +31,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        // initialize fireBaseApp
-        FirebaseApp.initializeApp(this)
-        // log into fireBase
-        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-        // firebase login ui - opens if needed.
-        startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(),
-            RC_SIGN_IN
-        )
+
+        dbHelper.initFBase(this)
 
         viewModel.inProgress?.observe(this, Observer {
             it?.let { inProgress ->
@@ -74,28 +66,21 @@ class MainActivity : AppCompatActivity() {
         btSubmit.setOnClickListener {
             viewModel.showProgress()
 
-            val db = FirebaseDatabase.getInstance()
+            val paymentEntry = PaymentEntry(
+                weekDay = PaymentEntry.WeekDays.FRI,
+                date = dateString,
+                description = etDescription.text.toString(),
+                category = spCategory.selectedItem.toString(),
+                value = etValue.text.toString(),
+                paymentType = spPaymentType.selectedItem.toString()
+            )
 
             user?.let {
 
-                val paymentEntry = PaymentEntry(
-                    weekDay = PaymentEntry.WeekDays.FRI,
-                    date = dateString,
-                    description = etDescription.text.toString(),
-                    category = spCategory.selectedItem.toString(),
-                    value = etValue.text.toString(),
-                    paymentType = spPaymentType.selectedItem.toString()
-                )
-
-                val paymentRef = db.getReference("payments/${it.uid}")
-                paymentRef.push().setValue(paymentEntry) { error, _ ->
-                    if (error != null) Log.e(TAG, error.message)
-                    else {
-                        Toast.makeText(this, R.string.main_activity_entry_added, Toast.LENGTH_SHORT).show()
-                        Log.i(TAG, "payment entry added!")
-                        viewModel.hideProgress()
-                    }
-                }
+                dbHelper.pushPaymentEntry(activity = this, user = it, paymentEntry = paymentEntry, callback = object: RealtimeDatabaseHelper.Callback {
+                    override fun onSuccess() = viewModel.hideProgress()
+                    override fun onFailure() = viewModel.hideProgress()
+                })
             }
         }
     }
