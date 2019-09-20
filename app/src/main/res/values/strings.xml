@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Finance</string>
+    <string name="main_activity_login_failed">Something went wrong with logging in!</string>
+    <string name="main_activity_entry_added">Entry added.</string>
 </resources>
