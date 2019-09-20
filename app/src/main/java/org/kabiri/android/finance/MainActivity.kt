@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 arrayOf("BAR", "CARD", "PP", "N26", "GOOG")
             )
 
-        btSubmit.setOnClickListener { _ ->
+        btSubmit.setOnClickListener {
             viewModel.showProgress()
 
             val db = FirebaseDatabase.getInstance()
@@ -87,11 +87,8 @@ class MainActivity : AppCompatActivity() {
                     paymentType = spPaymentType.selectedItem.toString()
                 )
 
-                // create the user specific table.
-                val userRef = db.getReference("users/" + it.uid)
-                val paymentRef = db.getReference("payments/")
-                paymentRef.push()
-                mRef.child("payments").child(it.uid).setValue(paymentEntry) { error, _ ->
+                val paymentRef = db.getReference("payments/${it.uid}")
+                paymentRef.push().setValue(paymentEntry) { error, _ ->
                     if (error != null) Log.e(TAG, error.message)
                     else {
                         Toast.makeText(this, R.string.main_activity_entry_added, Toast.LENGTH_SHORT).show()
