@@ -11,7 +11,7 @@ Firebase backed Finance logger to recognize where the money is being wasted!
  
  ### Usage
  - Register for a Firebase accound and create a project.
- - Add the `google-services.json` file under `app` module
+ - Add the `google-services.json` file (which you've downloaded from the FBase project) under the `app` module
  - *Oh, I know, I could explain it in more details but now I'm sitting in a train and will update it later!*
  
  ### More comes as the project evolves...
